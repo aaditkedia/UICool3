@@ -48,10 +48,29 @@ export function Reasons() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-15%' }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              whileHover="hover"
             >
-              <div className="reasons-icon">
-                <Icon size={22} strokeWidth={1.4} />
-              </div>
+              <motion.div
+                className="reasons-icon"
+                initial={{ scale: 0, rotate: -45 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true, margin: '-15%' }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 220,
+                  damping: 14,
+                  delay: 0.2 + i * 0.08,
+                }}
+                variants={{ hover: { y: -4, borderColor: 'var(--accent-burnt)' } }}
+              >
+                <motion.span
+                  variants={{ hover: { rotate: 12, scale: 1.08 } }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+                  style={{ display: 'inline-flex' }}
+                >
+                  <Icon size={22} strokeWidth={1.4} />
+                </motion.span>
+              </motion.div>
               <div className="reasons-number">0{i + 1}</div>
               <h3 className="reasons-label">{label}</h3>
               <p className="reasons-sub">{sub}</p>

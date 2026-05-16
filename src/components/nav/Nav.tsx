@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Pill } from '../ui/Pill';
+import { Magnetic } from '../ui/Magnetic';
 import { useNavScrollState } from '../../lib/useNavScrollState';
 import { scrollToSection } from '../../lib/smoothScroll';
 
@@ -48,9 +49,11 @@ export function Nav() {
         </nav>
 
         <div className="nav-right">
-          <Pill variant="primary" arrow onClick={(e) => handleAnchor(e as React.MouseEvent, '#footer')}>
-            Inquire
-          </Pill>
+          <Magnetic strength={0.28}>
+            <Pill variant="primary" arrow onClick={(e) => handleAnchor(e as React.MouseEvent, '#footer')}>
+              Inquire
+            </Pill>
+          </Magnetic>
           <button
             type="button"
             className="nav-toggle"

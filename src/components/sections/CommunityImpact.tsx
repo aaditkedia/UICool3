@@ -56,7 +56,23 @@ export function CommunityImpact() {
                 viewport={{ once: true, margin: '-12%' }}
                 transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               >
-                <img src={t.src} alt={t.alt} loading="lazy" />
+                <motion.div
+                  className="thumb-mask"
+                  initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+                  whileInView={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+                  viewport={{ once: true, margin: '-10%' }}
+                  transition={{ duration: 1.1, delay: 0.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <motion.img
+                    src={t.src}
+                    alt={t.alt}
+                    loading="lazy"
+                    initial={{ scale: 1.1 }}
+                    whileInView={{ scale: 1 }}
+                    viewport={{ once: true, margin: '-10%' }}
+                    transition={{ duration: 1.3, delay: 0.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </motion.div>
                 <figcaption>{t.caption}</figcaption>
               </motion.figure>
             ))}
@@ -131,12 +147,19 @@ export function CommunityImpact() {
           flex-direction: column;
           gap: 10px;
         }
-        .community-thumbs .thumb img {
+        .community-thumbs .thumb-mask {
           width: 100%;
           aspect-ratio: 3 / 4;
-          object-fit: cover;
           border-radius: 6px;
+          overflow: hidden;
           box-shadow: var(--shadow-soft);
+          will-change: clip-path;
+        }
+        .community-thumbs .thumb img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
         }
         .community-thumbs figcaption {
           font-size: 11px;

@@ -43,9 +43,23 @@ export function Accommodations() {
               transition={{ duration: 0.9, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ y: -8 }}
             >
-              <div className="acc-card-media">
-                <img src={c.src} alt={c.alt} loading="lazy" />
-              </div>
+              <motion.div
+                className="acc-card-media"
+                initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+                whileInView={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+                viewport={{ once: true, margin: '-10%' }}
+                transition={{ duration: 1.2, delay: 0.15 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <motion.img
+                  src={c.src}
+                  alt={c.alt}
+                  loading="lazy"
+                  initial={{ scale: 1.12 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true, margin: '-10%' }}
+                  transition={{ duration: 1.4, delay: 0.15 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                />
+              </motion.div>
               <figcaption>
                 <div className="acc-card-meta">
                   <span className="acc-card-index">0{i + 1}</span>

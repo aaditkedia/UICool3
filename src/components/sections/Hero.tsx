@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DisplayHeadline } from '../ui/DisplayHeadline';
 import { Eyebrow } from '../ui/Eyebrow';
 import { Pill } from '../ui/Pill';
+import { Magnetic } from '../ui/Magnetic';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +13,7 @@ const HERO_IMG =
   'https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=2400&q=80';
 
 export function Hero() {
-  const imgRef = useRef<HTMLImageElement | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -20,8 +21,8 @@ export function Hero() {
     if (window.innerWidth < 768) return;
 
     const ctx = gsap.context(() => {
-      gsap.to(imgRef.current, {
-        yPercent: 20,
+      gsap.to(wrapRef.current, {
+        yPercent: 18,
         ease: 'none',
         scrollTrigger: {
           trigger: '.hero',
@@ -37,13 +38,15 @@ export function Hero() {
   return (
     <section id="hero" className="hero">
       <div className="hero-media">
-        <img
-          ref={imgRef}
-          className="hero-img"
-          src={HERO_IMG}
-          alt="A male lion walking through Tanzanian savanna grass at sunset"
-          fetchPriority="high"
-        />
+        <div ref={wrapRef} className="hero-img-wrap">
+          <img
+            className="hero-img"
+            src={HERO_IMG}
+            alt="A male lion walking through Tanzanian savanna grass at sunset"
+            // eslint-disable-next-line react/no-unknown-property
+            {...({ fetchpriority: 'high' } as Record<string, string>)}
+          />
+        </div>
         <div className="hero-vignette" aria-hidden="true" />
         <div className="hero-fade" aria-hidden="true" />
       </div>
@@ -77,14 +80,27 @@ export function Hero() {
           transition={{ duration: 1, delay: 1.45, ease: [0.16, 1, 0.3, 1] }}
           style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}
         >
-          <Pill variant="primary">Book Now</Pill>
+          <Magnetic strength={0.32}>
+            <Pill variant="primary">Book Now</Pill>
+          </Magnetic>
         </motion.div>
       </div>
 
-      <div className="hero-meta" aria-hidden="true">
+      <motion.div
+        className="hero-meta"
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.4, delay: 1.6 }}
+      >
         <span>(01) — Serengeti, Tanzania</span>
-        <span>Scroll ↓</span>
-      </div>
+        <motion.span
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          Scroll ↓
+        </motion.span>
+      </motion.div>
 
       <style>{`
         .hero {
@@ -103,14 +119,24 @@ export function Hero() {
           inset: 0;
           z-index: -1;
         }
-        .hero-img {
+        .hero-img-wrap {
           position: absolute;
           inset: -10% 0 -10% 0;
           width: 100%;
           height: 120%;
+          will-change: transform;
+        }
+        .hero-img {
+          width: 100%;
+          height: 100%;
           object-fit: cover;
           object-position: center;
+          animation: ken-burns 24s ease-out forwards;
           will-change: transform;
+        }
+        @keyframes ken-burns {
+          from { transform: scale(1); }
+          to { transform: scale(1.07); }
         }
         .hero-vignette {
           position: absolute;
@@ -161,6 +187,10 @@ export function Hero() {
           .hero { min-height: 92vh; }
           .hero-stamp .display-headline { font-size: clamp(2.6rem, 14vw, 5rem); }
           .hero-meta { display: none; }
+          .hero-img { animation: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-img { animation: none; }
         }
       `}</style>
     </section>

@@ -1,6 +1,11 @@
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DisplayHeadline } from '../ui/DisplayHeadline';
 import { Eyebrow } from '../ui/Eyebrow';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const LION_CUB =
   'https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=900&q=80';
@@ -14,6 +19,30 @@ const reveal = {
 };
 
 export function BrandIntro() {
+  const portraitRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.innerWidth < 900) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        portraitRef.current,
+        { yPercent: 8 },
+        {
+          yPercent: -8,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.brand-intro',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        },
+      );
+    });
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section id="brand-intro" className="section brand-intro">
       <div className="container">
@@ -50,7 +79,20 @@ export function BrandIntro() {
             viewport={{ once: true, margin: '-15%' }}
             transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <img src={LION_CUB_ALT} alt="A lion cub resting beneath dry grass" loading="lazy" />
+            <motion.div
+              className="brand-intro-mask"
+              initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+              whileInView={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+              viewport={{ once: true, margin: '-10%' }}
+              transition={{ duration: 1.2, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <img
+                ref={portraitRef}
+                src={LION_CUB_ALT}
+                alt="A lion cub resting beneath dry grass"
+                loading="lazy"
+              />
+            </motion.div>
             <figcaption>Cub at first light · Ngorongoro</figcaption>
           </motion.figure>
 
@@ -104,12 +146,20 @@ export function BrandIntro() {
           margin: 0;
           position: relative;
         }
-        .brand-intro-col.center img {
+        .brand-intro-mask {
           width: 100%;
           aspect-ratio: 4 / 5;
-          object-fit: cover;
           border-radius: 8px;
+          overflow: hidden;
           box-shadow: var(--shadow-card);
+          will-change: clip-path;
+        }
+        .brand-intro-col.center img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          will-change: transform;
         }
         .brand-intro-col.center figcaption {
           margin-top: 16px;

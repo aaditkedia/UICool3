@@ -8,6 +8,7 @@ import { GetInspired } from './components/sections/GetInspired';
 import { CommunityImpact } from './components/sections/CommunityImpact';
 import { Footer } from './components/sections/Footer';
 import { GrainOverlay } from './components/ui/GrainOverlay';
+import { ScrollProgress } from './components/ui/ScrollProgress';
 import { initSmoothScroll } from './lib/smoothScroll';
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
       </main>
       <Footer />
       <GrainOverlay />
+      <ScrollProgress />
     </>
   );
 }
